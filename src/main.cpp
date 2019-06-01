@@ -16,7 +16,7 @@ String  readSerialMessage();
 String  readWifiSerialMessage();
 String sendToWifi(String, int, boolean);
 String sendToUno(String, int, boolean);
-void httpPOST(String, int, boolean);
+String httpPOST(String, int, boolean);
 
 
 
@@ -200,7 +200,14 @@ String sendToUno(String command, const int timeout, boolean debug){
   }
   return rwifiSerialonse;
 }
-void httpPOST(String data, int timeout, boolean debug){
+
+/*
+* Name: httpPOST
+* Description: send Data to server
+* Params: data - data to send; timeout - the time to wait; debug - print;
+* Returns: debug info
+*/
+String httpPOST(String data, int timeout, boolean debug){
   sendToWifi("AT+CIPSTART=\"TCP\",\"" + server + "\",80",4*rwifiSerialonseTime,DEBUG);
   delay(2000);
   if( wifiSerial.find("OK"))
@@ -224,8 +231,7 @@ void httpPOST(String data, int timeout, boolean debug){
   if(wifiSerial.find(">")) {
     Serial.println("Sending..");
     Serial.println(postRequest);
-    sendToWifi(postRequest,4000, debug);
-    delay(1000);
+    return sendToWifi(postRequest,4000, debug);
   }
-  delay(1500);
+  return "";
 }
